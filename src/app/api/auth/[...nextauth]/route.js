@@ -4,8 +4,8 @@ import GithubProvider from "next-auth/providers/github";
 const authOptions = {
   providers: [
     GithubProvider({
-      clientId: "Ov23liOCK1vx0OAismLd",
-      clientSecret: "d835de3b64a5110df0fbf1bf9521646b88232520",
+      clientId: "Iv23lirG2VGOp4Azx7k8",
+      clientSecret: "66e878215a9979604df99b0ff279e416bd7cc8cf",
     }),
   ],
   callbacks: {

@@ -9,6 +9,8 @@ export default function GlobalState({ children }) {
   const [loggedInAccount, setLoggedInAccount] = useState(null);
   const [accounts, setAccounts] = useState([]);
   const [pageLoader, setPageLoader] = useState(true);
+  const [mediaData, setMediaData] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
 
   const { data: session } = useSession();
 
@@ -26,6 +28,10 @@ export default function GlobalState({ children }) {
         setAccounts,
         pageLoader,
         setPageLoader,
+        mediaData,
+        setMediaData,
+        searchResults,
+        setSearchResults,
       }}
     >
       {children}

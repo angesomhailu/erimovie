@@ -38,7 +38,6 @@ export default function ManageAccounts() {
   const router = useRouter();
 
   async function getAllAccounts() {
-    if (!session?.user?.uid) return;
     const res = await fetch(
       `/api/account/get-all-accounts?id=${session.user.uid}`,
       {

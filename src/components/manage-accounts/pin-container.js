@@ -48,10 +48,6 @@ export default function PinContainer({
           ✕
         </span>
 
-        <h1 className="text-gray-400 font-bold text-[16px] mb-4">
-          Profile Lock is currently ON
-        </h1>
-
         <h2
           className={`font-bold text-[30px] ${
             pinError ? "text-[#e6b209]" : "text-white"
