@@ -93,13 +93,14 @@ export default function Navbar() {
       >
         <div className="flex items-center space-x-2 md:space-x-10">
           <img
-            src="https://rb.gy/ulxxee"
-            width={120}
-            height={120}
+            src="/images/logo.svg"
+            width={50}
+            height={50}
             alt="Erimovie"
             className="cursor-pointer object-contain"
             onClick={() => router.push("/browse")}
           />
+
           <ul className="hidden md:space-x-4 md:flex cursor-pointer">
             {menuItems.map((item) => (
               <li

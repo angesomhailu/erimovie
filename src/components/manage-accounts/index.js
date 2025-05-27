@@ -57,7 +57,7 @@ export default function ManageAccounts() {
     if (session?.user?.uid) {
       getAllAccounts();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   async function handleSave() {
@@ -113,7 +113,11 @@ export default function ManageAccounts() {
         "loggedInAccount",
         JSON.stringify(showPinContainer.account)
       );
-      router.push(pathname);
+      if (pathname.includes("my-list"))
+        router.push(
+          "/my-list/${session?.user?.uid}/${showPinContainer.account?_id}"
+        );
+      else router.push(pathname);
       setPageLoader(false);
     } else {
       setPageLoader(false);
