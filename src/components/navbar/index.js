@@ -8,7 +8,7 @@ import Search from "@/components/navbar/search";
 import AccountPopup from "@/components/navbar/account-popup";
 import { GlobalContext } from "@/context";
 import CircleLoader from "@/components/circle-loader";
-
+import DetailsPopup from "@/components/details-popup";
 export default function Navbar() {
   const { data: session } = useSession();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,6 +23,8 @@ export default function Navbar() {
     loggedInAccount,
     setAccounts,
     setLoggedInAccount,
+    showDetailsPopup,
+    setShowDetailsPopup,
   } = useContext(GlobalContext);
   const router = useRouter();
   const pathName = usePathname();
@@ -46,7 +48,7 @@ export default function Navbar() {
     {
       id: "my-list",
       title: "My List",
-      path: "/my-list",
+      path: `/my-list/${session?.user?.uid}/${loggedInAccount?._id}`,
     },
   ];
   //d8dc8358184dcf860a1920dfd259ba38
@@ -144,7 +146,7 @@ export default function Navbar() {
           </div>
         </div>
       </header>
-      {/* <DetailsPopup show={showDetailsPopup} setShow={setShowDetailsPopup} /> */}
+      <DetailsPopup show={showDetailsPopup} setShow={setShowDetailsPopup} />
       {showAccountPopup && (
         <AccountPopup
           accounts={accounts}

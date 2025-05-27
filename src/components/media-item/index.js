@@ -6,127 +6,128 @@ import {
   ChevronDownIcon,
   CheckIcon,
 } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
-// import { useContext } from "react";
-// import { GlobalContext } from "@/context";
-// import { useSession } from "next-auth/react";
-// import { getAllfavorites } from "@/utils";
+import { usePathname, useRouter } from "next/navigation";
+import { useContext } from "react";
+import { GlobalContext } from "@/context";
+import { useSession } from "next-auth/react";
+import { getAllfavorites } from "@/utils";
+
 const baseUrl = "https://image.tmdb.org/t/p/w500";
 
 export default function MediaItem({
   media,
-  //title,
   searchView = false,
-  // similarMovieView = false,
-  // listView = false,
+  similarMovieView = false,
+  listView = false,
+  title,
 }) {
   const router = useRouter();
-  //const pathName = usePathname();
-  // const {
-  //   setShowDetailsPopup,
-  //   loggedInAccount,
-  //   setFavorites,
-  //   setCurrentMediaInfoIdAndType,
-  //   similarMedias,
-  //   searchResults,
-  //   setSearchResults,
-  //   setSimilarMedias,
-  //   setMediaData,
-  //   mediaData,
-  // } = useContext(GlobalContext);
+  const pathName = usePathname();
+  const {
+    setShowDetailsPopup,
+    loggedInAccount,
+    setFavorites,
+    setCurrentMediaInfoIdAndType,
+    similarMedias,
+    searchResults,
+    setSearchResults,
+    setSimilarMedias,
+    setMediaData,
+    mediaData,
+  } = useContext(GlobalContext);
 
-  // const { data: session } = useSession();
+  const { data: session } = useSession();
 
-  // async function updateFavorites() {
-  //   const res = await getAllfavorites(session?.user?.uid, loggedInAccount?._id);
-  //   if (res)
-  //     setFavorites(
-  //       res.map((item) => ({
-  //         ...item,
-  //         addedToFavorites: true,
-  //       }))
-  //     );
-  // }
+  async function updateFavorites() {
+    const res = await getAllfavorites(session?.user?.uid, loggedInAccount?._id);
+    if (res)
+      setFavorites(
+        res.map((item) => ({
+          ...item,
+          addedToFavorites: true,
+        }))
+      );
+  }
 
-  // async function handleAddToFavorites(item) {
-  //   const { backdrop_path, poster_path, id, type } = item;
-  //   const res = await fetch("/api/favorites/add-favorite", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       backdrop_path,
-  //       poster_path,
-  //       movieID: id,
-  //       type,
-  //       uid: session?.user?.uid,
-  //       accountID: loggedInAccount?._id,
-  //     }),
-  //   });
+  async function handleAddToFavorites(item) {
+    const { backdrop_path, poster_path, id, type } = item;
+    const res = await fetch("/api/favorites/add-favorite", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        backdrop_path,
+        poster_path,
+        movieID: id,
+        type,
+        uid: session?.user?.uid,
+        accountID: loggedInAccount?._id,
+      }),
+    });
 
-  //   const data = await res.json();
+    const data = await res.json();
 
-  //   if (data && data.success) {
-  //     if (pathName.includes("my-list")) updateFavorites();
-  //     if (searchView) {
-  //       let updatedSearchResults = [...searchResults];
-  //       const indexOfCurrentAddedMedia = updatedSearchResults.findIndex(
-  //         (item) => item.id === id
-  //       );
+    if (data && data.success) {
+      if (pathName.includes("my-list")) updateFavorites();
+      if (searchView) {
+        let updatedSearchResults = [...searchResults];
+        const indexOfCurrentAddedMedia = updatedSearchResults.findIndex(
+          (item) => item.id === id
+        );
 
-  //       updatedSearchResults[indexOfCurrentAddedMedia] = {
-  //         ...updatedSearchResults[indexOfCurrentAddedMedia],
-  //         addedToFavorites: true,
-  //       };
+        updatedSearchResults[indexOfCurrentAddedMedia] = {
+          ...updatedSearchResults[indexOfCurrentAddedMedia],
+          addedToFavorites: true,
+        };
 
-  //       setSearchResults(updatedSearchResults);
-  //     } else if (similarMovieView) {
-  //       let updatedSimilarMedias = [...similarMedias];
-  //       const indexOfCurrentAddedMedia = updatedSimilarMedias.findIndex(
-  //         (item) => item.id === id
-  //       );
+        setSearchResults(updatedSearchResults);
+      } else if (similarMovieView) {
+        let updatedSimilarMedias = [...similarMedias];
+        const indexOfCurrentAddedMedia = updatedSimilarMedias.findIndex(
+          (item) => item.id === id
+        );
 
-  //       updatedSimilarMedias[indexOfCurrentAddedMedia] = {
-  //         ...updatedSimilarMedias[indexOfCurrentAddedMedia],
-  //         addedToFavorites: true,
-  //       };
+        updatedSimilarMedias[indexOfCurrentAddedMedia] = {
+          ...updatedSimilarMedias[indexOfCurrentAddedMedia],
+          addedToFavorites: true,
+        };
 
-  //       setSimilarMedias(updatedSimilarMedias);
-  //     } else {
-  //       let updatedMediaData = [...mediaData];
+        setSimilarMedias(updatedSimilarMedias);
+      } else {
+        let updatedMediaData = [...mediaData];
 
-  //       const findIndexOfRowItem = updatedMediaData.findIndex(
-  //         (item) => item.title === title
-  //       );
+        const findIndexOfRowItem = updatedMediaData.findIndex(
+          (item) => item.title === title
+        );
 
-  //       let currentMovieArrayFromRowItem =
-  //         updatedMediaData[findIndexOfRowItem].medias;
-  //       const findIndexOfCurrentMovie = currentMovieArrayFromRowItem.findIndex(
-  //         (item) => item.id === id
-  //       );
+        let currentMovieArrayFromRowItem =
+          updatedMediaData[findIndexOfRowItem].medias;
+        const findIndexOfCurrentMovie = currentMovieArrayFromRowItem.findIndex(
+          (item) => item.id === id
+        );
 
-  //       currentMovieArrayFromRowItem[findIndexOfCurrentMovie] = {
-  //         ...currentMovieArrayFromRowItem[findIndexOfCurrentMovie],
-  //         addedToFavorites: true,
-  //       };
+        currentMovieArrayFromRowItem[findIndexOfCurrentMovie] = {
+          ...currentMovieArrayFromRowItem[findIndexOfCurrentMovie],
+          addedToFavorites: true,
+        };
 
-  //       setMediaData(updatedMediaData);
-  //     }
-  //   }
+        setMediaData(updatedMediaData);
+      }
+    }
 
-  //   console.log(data, "sangam");
-  // }
+    console.log(data, "angesom");
+  }
 
-  // async function handleRemoveFavorites(item) {
-  //   const res = await fetch(`/api/favorites/remove-favorite?id=${item._id}`, {
-  //     method: "DELETE",
-  //   });
+  async function handleRemoveFavorites(item) {
+    const res = await fetch(`/api/favorites/remove-favorite?id=${item._id}`, {
+      method: "DELETE",
+    });
 
-  //   const data = await res.json();
+    const data = await res.json();
 
-  //   if (data.success) updateFavorites();
-  // }
+    if (data.success) updateFavorites();
+  }
 
   return (
     <motion.div
@@ -146,21 +147,22 @@ export default function MediaItem({
           className="rounded sm object-cover md:rounded hover:rounded-sm"
           onClick={() =>
             router.push(
-              `/watch/${media?.type}/${media?.id}`
-              // `/watch/${media?.type}/${listView ? media?.movieID : media?.id}`
+              `/watch/${media?.type}/${listView ? media?.movieID : media?.id}`
             )
           }
         />
         <div className="space-x-3 hidden absolute p-2 bottom-0 buttonWrapper">
           <button
-            // onClick={
-            //   media?.addedToFavorites
-            //     ? listView
-            //       ? () => handleRemoveFavorites(media)
-            //       : null
-            //     : () => handleAddToFavorites(media)
-            // }
-            className="cursor-pointer border flex p-2 items-center gap-x-2 rounded-full  text-sm font-semibold transition hover:opacity-90 border-white   bg-black opacity-75 text-black"
+            onClick={
+              media?.addedToFavorites
+                ? listView
+                  ? () => handleRemoveFavorites(media)
+                  : null
+                : () => handleAddToFavorites(media)
+            }
+            className={`${
+              media?.addedToFavorites && !listView && "cursor-not-allowed"
+            } cursor-pointer border flex p-2 items-center gap-x-2 rounded-full  text-sm font-semibold transition hover:opacity-90 border-white   bg-black opacity-75 text-black`}
           >
             {media?.addedToFavorites ? (
               <CheckIcon color="#ffffff" className="h-7 w-7" />
@@ -169,13 +171,13 @@ export default function MediaItem({
             )}
           </button>
           <button
-            // onClick={() => {
-            //   setShowDetailsPopup(true);
-            //   setCurrentMediaInfoIdAndType({
-            //     type: media?.type,
-            //     id: listView ? media?.movieID : media?.id,
-            //   });
-            // }}
+            onClick={() => {
+              setShowDetailsPopup(true);
+              setCurrentMediaInfoIdAndType({
+                type: media?.type,
+                id: listView ? media?.movieID : media?.id,
+              });
+            }}
             className="cursor-pointer p-2 border flex items-center gap-x-2 rounded-full  text-sm font-semibold transition hover:opacity-90  border-white  bg-black opacity-75 "
           >
             <ChevronDownIcon color="#fffffff" className="h-7 w-7" />
@@ -185,7 +187,3 @@ export default function MediaItem({
     </motion.div>
   );
 }
-
-// className={`${
-//   media?.addedToFavorites && !listView && "cursor-not-allowed"
-// } cursor-pointer border flex p-2 items-center gap-x-2 rounded-full  text-sm font-semibold transition hover:opacity-90 border-white   bg-black opacity-75 text-black`}
